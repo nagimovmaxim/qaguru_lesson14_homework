@@ -15,7 +15,7 @@ public class WdHubStatusTests extends TestBase {
         given()
                 .auth().basic(usr, pwd)
                 .when()
-                .get(wdHubStatusApiUri)
+                .get("/status")
                 .then()
                 .statusCode(200);
     }
@@ -26,7 +26,7 @@ public class WdHubStatusTests extends TestBase {
         given()
                 .auth().basic(usr, pwd)
                 .when()
-                .get(wdHubStatusApiUri)
+                .get("/status")
                 .then()
                 .statusCode(200)
                 .body(matchesJsonSchemaInClasspath("schemas/wd_hub_status_schema.json"));
@@ -38,7 +38,7 @@ public class WdHubStatusTests extends TestBase {
         given()
                 .auth().basic(usr, pwd)
                 .when()
-                .get(wdHubStatusApiUri)
+                .get("/status")
                 .then()
                 .statusCode(200)
                 .body("value.message", containsString("Selenoid 1.11.3 built at"));
@@ -50,7 +50,7 @@ public class WdHubStatusTests extends TestBase {
         given()
                 .auth().basic(usr, pwd)
                 .when()
-                .get(wdHubStatusApiUri)
+                .get("/status")
                 .then()
                 .statusCode(200)
                 .body("value.ready", is(true));
@@ -61,9 +61,10 @@ public class WdHubStatusTests extends TestBase {
     public void checkRespStatusUnauthorizedReqTest() {
         given()
                 .when()
-                .get(wdHubStatusApiUri)
+                .get("/status")
                 .then()
-                .statusCode(401);
+                .statusCode(401)
+                .body(containsString("401 Authorization Required"));
     }
 
     @Test
@@ -71,10 +72,12 @@ public class WdHubStatusTests extends TestBase {
     public void checkRespStatusWrongReqTest() {
         given()
                 .auth().basic(usr, pwd)
+                .basePath("/wd/huhb")
                 .when()
-                .get("/wd/huhb/status")
+                .get("/status")
                 .then()
-                .statusCode(404);
+                .statusCode(404)
+                .body(containsString("404 page not found"));
     }
 
     @Test
@@ -83,10 +86,10 @@ public class WdHubStatusTests extends TestBase {
         given()
                 .auth().basic("admin", pwd)
                 .when()
-                .get(wdHubStatusApiUri)
+                .get("/status")
                 .then()
-                .log().all()
-                .statusCode(401);
+                .statusCode(401)
+                .body(containsString("401 Authorization Required"));
     }
 
     @Test
@@ -95,9 +98,9 @@ public class WdHubStatusTests extends TestBase {
         given()
                 .auth().basic(usr, "pwd")
                 .when()
-                .get(wdHubStatusApiUri)
+                .get("/status")
                 .then()
-                .log().all()
-                .statusCode(401);
+                .statusCode(401)
+                .body(containsString("401 Authorization Required"));
     }
 }
