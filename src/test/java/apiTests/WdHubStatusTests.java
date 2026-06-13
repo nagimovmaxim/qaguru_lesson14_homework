@@ -3,12 +3,12 @@ package apiTests;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.Test;
 
-
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
 
-public class WdHubStatusTests extends TestBase{
+public class WdHubStatusTests extends TestBase {
     @Test
     @Description("UC01 Positive test: check response status 200 on normal request")
     public void checkResponseStatusNormalReqTest() {
